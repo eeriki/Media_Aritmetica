@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media</title>
+    
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100vw;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+        input{
+            margin: 0px 10px 10px 10px;
+            width: 150px;
+
+        }
+        label{
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        button{
+            width: 100px;
+            height: 35px;
+        }
+        #calcular{
+            margin-left: 130px;
+        }
+        #add{
+            margin-top: -15px;
+        }
+
+        #title{
+            display: inline;
+        }
+        .container{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+
+            gap: 10px;
+        }
+        .lados{
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .lado{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #text{
+            align-self: start;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="title">Calculo de médias</h1>
+            <button id="add"><b>Adicionar nota</b></button>
+            <button id="remove">Remover nota</button>
+        </div>
+        <div class="lados">
+            <div class="lado" id="impar">
+                
+                   <!-- <label for="n1">Nota 1</label>
+                    <input type="number" class="notass">
+               
+                    <label for="n2">Nota 3</label>
+                    <input type="number" class="notass">
+                   -->
+            </div>
+            <div class="lado" id="par">
+               
+                    <!--<label for="n1">Nota 2</label>
+                    <input type="number" class="notass">
+                
+                    <label for="n2">Nota 4</label>
+                    <input type="number" class="notass">
+                    -->
+            </div>
+        </div>
+        <button id="calcular">Calcular</button>
+        <hr>
+        <p id="text"><b>Resultado: </b><span id="result"></span></p>
+    </div>
+    
+
+    <script>
+        var notas  = document.querySelectorAll('.notass')
+        var labels = document.querySelectorAll('label')
+
+        const botao  = document.querySelector('#calcular')
+        const adc    = document.querySelector('#add')
+        const remove = document.querySelector('#remove')
+
+        const ladoImpar = document.querySelector('#impar')
+        const ladoPar   = document.querySelector('#par')
+
+        const resultado = document.querySelector('#result')
+
+        const noteCountMin = 0
+        const noteCountMax = 10
+        var   noteCount    = 0
+        
+        var soma  = 0
+        var media = 0
+        
+        const Media = () => {
+            var numeros = []
+            for(var i = 0; i < noteCount; i++){
+                numeros.push(Number(notas[i].value))
+            }
+            for(var i = 0; i < numeros.length; i++){
+                soma += numeros[i]
+            }
+            media = soma / noteCount
+
+            return media
+        }
+
+        const ParImpar = (num) => {
+                if(num % 2 === 0){
+                    return 'par'
+                }
+                return 'impar'
+        }
+
+        const Calcular = () => {
+            if(noteCount > 1){
+                resultado.innerHTML = `A sua média é de ${Media()}`
+                for(var i = 0; i < noteCount; i++){
+                        notas[i].value = ''
+                }
+                soma = 0
+                media = 0
+            }
+        }
+
+        const AddNote = () => {
+            if(noteCount < noteCountMax){
+                noteCount++
+                const newLabel = `<label for="n${noteCount}" id="l${noteCount}">Nota ${noteCount}</label>`
+                const newInput = `<input type="number" min="0" max="10" id="n${noteCount}" name="n${noteCount}" class="notass">`
+                if(ParImpar(noteCount) == 'par'){   
+                    ladoPar.innerHTML += newLabel
+                    ladoPar.innerHTML += newInput
+                }
+                else{
+                    ladoImpar.innerHTML += newLabel
+                    ladoImpar.innerHTML += newInput
+                }
+                notas = document.querySelectorAll('.notass')
+                labels = document.querySelectorAll('label')
+            }
+        }
+
+        const RemoveNote = () => {
+            var labS = document.querySelector(`#l${noteCount}`)
+            var inputS = document.querySelector(`#n${noteCount}`)
+            if(noteCount > noteCountMin){
+                if(ParImpar(noteCount) === 'par'){
+                    labS.remove()
+                    inputS.remove()
+                    noteCount--
+                }else{
+                    inputS.remove()
+                    labS.remove()
+                    noteCount--
+                }
+            }
+            labels = document.querySelectorAll('label')
+            notas = document.querySelectorAll('.notass')
+        }
+        
+        botao.addEventListener('click', Calcular)
+        adc.addEventListener('click', AddNote)
+        remove.addEventListener('click', RemoveNote)
+    </script>
+
+</body>
+</html>
